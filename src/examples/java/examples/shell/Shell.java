@@ -49,7 +49,7 @@ public class Shell implements Consumer<TtyConnection> {
   public void read(final TtyConnection conn, final Readline readline) {
 
     // Just call readline and get a callback when line is read
-    readline.readline(conn, "% ", new Consumer<String>() {
+    readline.readline(conn, "$ ", new Consumer<String>() {
       @Override
       public void accept(String line) {
         // Ctrl-D
@@ -126,6 +126,7 @@ public class Shell implements Consumer<TtyConnection> {
         conn.setEventHandler(null);
 
         // Readline again
+        // TODO 继续读取
         read(conn, readline);
       }
     }
@@ -164,7 +165,7 @@ public class Shell implements Consumer<TtyConnection> {
           }
           conn.write(args.get(i));
         }
-        conn.write("\n");
+        conn.write("\n\n");
       }
     },
 

@@ -166,6 +166,7 @@ public class Readline {
     conn.execute(new Runnable() {
       @Override
       public void run() {
+        // TODO 帮助处理输入事件（还是回显)
         deliver();
       }
     });
@@ -228,6 +229,9 @@ public class Readline {
         conn.setSizeHandler(prevSizeHandler);
         conn.setEventHandler(prevEventHandler);
       }
+      // TODO 将输入事件传递给后台处理：-> ...
+      //  -> examples.shell.Shell.read -> readline.readline(conn, "$ ", new Consumer<String>()...)
+      //  -> 业务逻辑 -> Task.start -> sleep/help/window/.../echo.execute -> conn.write输出到控制台
       requestHandler.accept(s);
       return true;
     }
@@ -238,6 +242,9 @@ public class Readline {
       if (event.length() == 1) {
         if (event.getCodePointAt(0) == 4 && buffer.getSize() == 0) {
           // Specific behavior for Ctrl-D with empty line
+          // TODO 触发Ctrl-D处理逻辑 -> examples.shell.Shell.read
+          //  -> readline.readline(conn, "$ ", new Consumer<String>()...)的consumer.accept方法中将
+          //  line == null看作ctrl-D事件，所以这里传递null跟end方法就可以触发Ctrl-D响应逻辑
           end(null);
           return;
         } else if (event.getCodePointAt(0) == 3) {
@@ -263,6 +270,7 @@ public class Readline {
         }
       }
       if (event instanceof FunctionEvent) {
+        // TODO 处理输出数据
         FunctionEvent fname = (FunctionEvent) event;
         Function function = functions.get(fname.name());
         if (function != null) {
@@ -274,6 +282,7 @@ public class Readline {
           Logging.READLINE.warn("Unimplemented function " + fname.name());
         }
       } else {
+        // TODO 只处理输入事件？
         LineBuffer buf = buffer.copy();
         for (int i = 0;i < event.length();i++) {
           int codePoint = event.getCodePointAt(i);
@@ -406,6 +415,7 @@ public class Readline {
           }
         }
       }, width);
+      // TODO 将键盘输入回显到控制台
       conn.stdoutHandler().accept(Helper.convert(codePoints));
       buffer.clear();
       buffer.insert(update.toArray());
@@ -430,8 +440,11 @@ public class Readline {
         @Override
         public void accept(int[] data) {
           synchronized (Readline.this) {
+            // TODO 将输入信息传递给后台处理 -> deliver检查到FunctionEvent类型事件即为后台事件，触发按后台逻辑处理,
+            //   如果不是FunctionEvent，直接调用conn.write回显
             decoder.append(data);
           }
+          // TODO 响应控制台输入事件，将检测到的控制台输入字符进行回显，
           deliver();
         }
       });
