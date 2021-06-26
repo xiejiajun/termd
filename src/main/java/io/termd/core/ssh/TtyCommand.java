@@ -166,7 +166,7 @@ public class TtyCommand implements AsyncCommand, ChannelDataReceiver, ChannelSes
     term = env.getEnv().get("TERM");
     conn = new Connection();
 
-    //
+    // TODO 因为TtyCommand实现了ChannelDataReceiver接口，所以可以用来覆盖度默认的AsyncDataReceiver/PipeDataReceiver
     session.setDataReceiver(this);
     handler.accept(conn);
   }
