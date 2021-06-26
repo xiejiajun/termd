@@ -86,6 +86,7 @@ public class TtyCommand implements AsyncCommand, ChannelDataReceiver, ChannelSes
   public int data(ChannelSession channel, byte[] buf, int start, int len) throws IOException {
     if (decoder != null) {
       lastAccessedTime = System.currentTimeMillis();
+      // TODO 将从输入设备监听到的数据写入自己的处理队列供后端进行处理
       decoder.write(buf, start, len);
     } else {
       // Data send too early ?
