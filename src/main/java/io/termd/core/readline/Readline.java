@@ -54,6 +54,7 @@ public class Readline {
     // this.device = TermInfo.defaultInfo().getDevice("xterm"); // For now use xterm
     this.decoder = new EventQueue(keymap);
     this.history = new ArrayList<int[]>();
+    // TODO 添加处理普通行的函数
     addFunction(ACCEPT_LINE);
   }
 
@@ -270,13 +271,16 @@ public class Readline {
         }
       }
       if (event instanceof FunctionEvent) {
-        // TODO 处理输出数据
+        // TODO 处理src/main/resources/io/termd/core/readline/inputrc中定义的特殊指令
         FunctionEvent fname = (FunctionEvent) event;
         Function function = functions.get(fname.name());
         if (function != null) {
           synchronized (this) {
             paused = true;
           }
+          // TODO io.termd.core.readline.functions包下的其中一个函数
+          //  或者处理普通指令(例如examples.shell.Shell定义的sleep/window/echo等)
+          //  的io.termd.core.readline.Function.apply
           function.apply(this);
         } else {
           Logging.READLINE.warn("Unimplemented function " + fname.name());

@@ -45,19 +45,25 @@ public abstract class InputrcParser {
 
   static void parse(InputStream s, InputrcParser handler) {
 
+    // TODO 使用Scanner读取文件流
     Scanner sc = new Scanner(s, "US-ASCII").useDelimiter("\n");
     while (sc.hasNext()) {
+      // TODO 读取一行
       String next = sc.next();
       if (COMMENT.matcher(next).matches()) {
+        // TODO #开头的注释忽略掉
       } else if (CONDITIONAL.matcher(next).matches()) {
+        // TODO $开头的变量引用未实现
         Logging.READLINE.warn("Inputrc conditional not implemented");
       } else {
         Matcher matcher = SET_VARIABLE.matcher(next);
         if (matcher.matches()) {
+          // TODO SET指令解析
           String variable = matcher.group(1);
           String value = matcher.group(2);
           Logging.READLINE.warn("Inputrc set variable not implemented");
         } else {
+          // TODO 变量映射
           matcher = BIND.matcher(next);
           if (matcher.matches()) {
             String keyseq = matcher.group(1);
@@ -76,6 +82,7 @@ public abstract class InputrcParser {
               }
             } else {
               if (functionname != null) {
+                // TODO 添加函数映射关系
                 handler.bindFunction(keyname, functionname);
               } else if (macro1 != null) {
                 handler.bindMacro(keyname, macro1);

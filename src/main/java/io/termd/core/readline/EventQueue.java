@@ -31,6 +31,7 @@ public class EventQueue implements Iterator<KeyEvent> {
   private int[] pending = new int[0];
 
   public EventQueue(Keymap keymap) {
+    // TODO bindings保存的是src/main/resources/io/termd/core/readline/inputrc中设置的特殊指令
     this.bindings = keymap.bindings.toArray(new KeyEvent[keymap.bindings.size()]);
   }
 
@@ -47,6 +48,7 @@ public class EventQueue implements Iterator<KeyEvent> {
 
   public KeyEvent peek() {
     if (events.isEmpty()) {
+      // TODO 返回特殊指定
       return match(pending);
     } else {
       return events.peekFirst();
@@ -59,6 +61,7 @@ public class EventQueue implements Iterator<KeyEvent> {
 
   public KeyEvent next() {
     if (events.isEmpty()) {
+      // TODO 看看是不是特殊指令
       KeyEvent next = match(pending);
       if (next != null) {
         events.add(next);
@@ -87,6 +90,7 @@ public class EventQueue implements Iterator<KeyEvent> {
       KeyEvent candidate = null;
       int prefixes = 0;
       next:
+      // TODO 都是FunctionEvent
       for (KeyEvent action : bindings) {
         if (action.length() > 0) {
           if (action.length() <= buffer.length) {
@@ -111,6 +115,7 @@ public class EventQueue implements Iterator<KeyEvent> {
       }
       if (candidate == null) {
         if (prefixes == 0) {
+          // TODO 不是特殊指令
           final int c = buffer[0];
           return new KeyEventSupport() {
             @Override

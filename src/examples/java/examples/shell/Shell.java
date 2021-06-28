@@ -31,6 +31,8 @@ public class Shell implements Consumer<TtyConnection> {
 
   public void accept(final TtyConnection conn) {
     InputStream inputrc = Keymap.class.getResourceAsStream("inputrc");
+    // TODO keymap.bindings保存的是src/main/resources/io/termd/core/readline/inputrc中设置的特殊指令
+    //  格式为：特殊指令：指令名称
     Keymap keymap = new Keymap(inputrc);
     Readline readline = new Readline(keymap);
     for (io.termd.core.readline.Function function : Helper.loadServices(Thread.currentThread().getContextClassLoader(), io.termd.core.readline.Function.class)) {
