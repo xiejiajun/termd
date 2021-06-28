@@ -1,0 +1,4 @@
+### TtyCommand数据处理流程梳理
+- 数据接收流程:
+	- ... -> (ChannelInboundHandlerAdapter#channelRead -> NettyIoHandlerBridge#messageReceived || ... -> Nio2Session#handleReadCycleCompletion || ... -> MinaService#messageReceived) -> AbstractSessionIoHandler#messageReceived -> AbstractSession#messageReceived -> AbstractSession#decode -> AbstractSession#handleMessage -> AbstractSession#doHandleMessage -> AbstractConnectionService#process -> AbstractConnectionService#channelData -> AbstractChannel#handleData -> ChannelSession#doWriteData -> TtyCommand#data ->  decoder.write(buf, start, len): BinaryDecoder#write(byte[], int, int) -> onChar.accept:TtyEventDecoder.accept -> TtyEventDecoder.readHandler.accept
+		- Readline.Interaction#install、Shell.Command#execute等方法中的conn.setStdinHandler实际上是动态修改终端输入数据的处理器实现逻辑，设为null默认不处理，相当于丢弃

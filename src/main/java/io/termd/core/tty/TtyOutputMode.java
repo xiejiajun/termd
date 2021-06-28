@@ -32,6 +32,9 @@ public class TtyOutputMode implements Consumer<int[]> {
 
   @Override
   public void accept(int[] data) {
+    // TODO 假设这里的TtyOutputMode为TtyCommand.stdout，则readHandler实际好似封装了
+    //  IoOutputStream的BinaryEncoder，readHandler.accept最终会调用IoOutputStream.write输出数据到终端
+    //  所以readHandler是不是改成writeHandler更贴切呢？
     if (readHandler != null && data.length > 0) {
       // TODO 起始指针
       int prev = 0;
