@@ -263,6 +263,7 @@ public class Readline {
           // Specific behavior Ctrl-L
 
           // \033 is the control character, \033[H means move the cursor to (0,0), \033[2J means clear screen
+          // TODO 对控制台清屏的指令
           conn.write("\033[H\033[2J");
 
           this.redraw();
@@ -322,6 +323,7 @@ public class Readline {
       out.accept(new int[]{'\r'});
       while (curHeight != endHeight) {
         if (curHeight > endHeight) {
+          // TODO 光标上移一行
           out.accept(new int[]{'\033','[','1','A'});
           curHeight--;
         } else {
@@ -332,6 +334,7 @@ public class Readline {
 
       // Now erase and redraw
       while (curHeight > 0) {
+        // TODO 清除控制台当前行内容
         out.accept(new int[]{'\033','[','1','K'});
         out.accept(new int[]{'\033','[','1','A'});
         curHeight--;
